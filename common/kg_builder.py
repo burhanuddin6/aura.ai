@@ -25,16 +25,16 @@ potential_schema = [
 ]
 
 # Create an Embedder object
-embedder = OllamaEmbeddings(model="nomic-embed-text")
+embedder = OllamaEmbeddings(model=os.getenv("KG_BUILDER_EMBEDDING_MODEL_NAME"))
 
 # Instantiate the LLM
 llm = OllamaLLM(
-    model_name="deepseek-r1:7b",
-    # model_params={
-    #     "max_tokens": 2000,
-    #     "response_format": {"type": "json_object"},
-    #     "temperature": 0,
-    # },
+    model_name=os.getenv("KG_BUILDER_LLM_MODEL_NAME"),
+    model_params={
+        "max_tokens": 2000,
+        "response_format": {"type": "json_object"},
+        "temperature": 0,
+    },
 )
 
 # Instantiate the SimpleKGPipeline
