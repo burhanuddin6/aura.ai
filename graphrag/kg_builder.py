@@ -26,6 +26,7 @@ from dotenv import load_dotenv
 
 # local libs
 from data_model import ENTITIES, RELATIONS, POTENTIAL_SCHEMA
+from vertex_llm import vertex_llm
 
 # Load environment variables from .env file
 load_dotenv()
@@ -79,7 +80,7 @@ async def run_pipeline(
     Run the pipeline with the given text."
     """
     # Create an instance of the SimpleKGPipeline
-    return await kg_builder.run_async(text=TEXT)
+    return await kg_builder.run_async(text=text)
 
 
 async def main() -> PipelineResult:
@@ -89,7 +90,21 @@ async def main() -> PipelineResult:
     # Close the Neo4j driver
     await kg_builder.runner.close()
     neo4j_driver.close()
+    return res
 
+
+async def build_kg_from_text(
+    text: str = TEXT,
+) -> None:
+    """
+    Build a KG from the given text.
+    """
+    kg_builder, neo4j_driver = define_pipeline()
+    res = await run_pipeline(kg_builder, text)
+    
+    # Close the Neo4j driver
+    await kg_builder.runner.close()
+    neo4j_driver.close()
     return res
 
 
