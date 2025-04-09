@@ -1,2 +1,4 @@
 venv
 .env.gemini_api_key
+testopenai*
+.env.azure

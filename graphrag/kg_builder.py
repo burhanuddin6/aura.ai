@@ -26,7 +26,7 @@ from dotenv import load_dotenv
 
 # local libs
 from data_model import ENTITIES, RELATIONS, POTENTIAL_SCHEMA
-from vertex_llm import vertex_llm
+from azure_llm import CustomLLM
 
 # Load environment variables from .env file
 load_dotenv()
@@ -59,7 +59,7 @@ def define_pipeline(
     
     # Create an instance of the SimpleKGPipeline
     kg_builder = SimpleKGPipeline(
-        llm=llm,
+        llm=CustomLLM(""),
         driver=neo4j_driver,
         embedder=OllamaEmbeddings(model=os.getenv("KG_BUILDER_EMBEDDING_MODEL_NAME")),
         entities=ENTITIES,

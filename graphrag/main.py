@@ -2,7 +2,6 @@
 import json
 import os
 import asyncio
-from dotenv import load_dotenv
 
 # merged json stored at ./Data/merged.json
 json_file_path = os.path.join("Data/VisionPro", "merged.json")
