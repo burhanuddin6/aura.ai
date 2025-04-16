@@ -29,7 +29,7 @@ from data_model import ENTITIES, RELATIONS, POTENTIAL_SCHEMA
 from azure_llm import CustomLLM
 
 # Load environment variables from .env file
-load_dotenv()
+load_dotenv(".env")
 
 logging.basicConfig()
 logging.getLogger("neo4j_graphrag").setLevel(logging.DEBUG)
@@ -111,3 +111,12 @@ async def build_kg_from_text(
 if __name__ == "__main__":
     res = asyncio.run(main())
     print(res)
+
+
+
+
+
+
+
+
+
