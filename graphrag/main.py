@@ -14,9 +14,10 @@ import graphrag.kg_builder as kg_builder
 vision_docs = data["visionos_docs_PDFs"]
 
 async def process_vision_docs():
-    for key, value in list(vision_docs.items())[:3]:
+    for key, value in list(vision_docs.items())[:10]:
         data = f'{key}: {value}'
         await kg_builder.build_kg_from_text(data)
+    # await kg_builder.build_kg_from_pdf()
 
 # Run the async function
 asyncio.run(process_vision_docs())

@@ -6,7 +6,7 @@ from neo4j_graphrag.indexes import create_vector_index
 # 3rd party libs
 from dotenv import load_dotenv
 
-from shared.env import (
+from graphrag.shared.env import (
     NEO4J_URI,
     NEO4J_USERNAME,
     NEO4J_PASSWORD,

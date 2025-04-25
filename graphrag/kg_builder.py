@@ -20,10 +20,7 @@ from neo4j_graphrag.llm import LLMInterface
 from neo4j_graphrag.embeddings import OllamaEmbeddings
 from neo4j_graphrag.experimental.pipeline.kg_builder import SimpleKGPipeline
 from neo4j_graphrag.llm import OllamaLLM
-
 from neo4j_graphrag.experimental.components.pdf_loader import PdfLoader
-from graphrag.document_sources.wikipedia import WikiLoader
-from typing import Any
 
 
 # 3rd party libs
@@ -46,28 +43,11 @@ URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")
 AUTH = (os.getenv("NEO4J_USERNAME", "neo4j"), os.getenv("NEO4J_PASSWORD", "password"))
 DATABASE = "neo4j"
 
-class CustomKGPipeline(SimpleKGPipeline):
-    """
-    Custom pipeline class to override the default behavior of the SimpleKGPipeline.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.runner = None
-
-    async def run_async(self, user_input: dict[str, Any]) -> PipelineResult:
-        """
-        Run the pipeline with the given text.
-        """
-        return await self.runner.run(user_input)
-    
-
 # Text to process
 TEXT = """The son of Duke Leto Atreides and the Lady Jessica, Paul is the heir of House Atreides,
 an aristocratic family that rules the planet Caladan, the rainy planet, since 10191."""
 
-def define_pipeline(
-) -> CustomKGPipeline :
+def define_pipeline(from_pdf: bool = False) -> SimpleKGPipeline:
     llm : LLMInterface = OllamaLLM(
         model_name=os.getenv("KG_BUILDER_LLM_MODEL_NAME"),
         model_params={
@@ -78,31 +58,35 @@ def define_pipeline(
     
     neo4j_driver : neo4j.Driver = neo4j.GraphDatabase.driver(URI, auth=AUTH)
     
-    # Create an instance of the CustomKGPipeline
-    kg_builder = CustomKGPipeline(
+    # Create an instance of the SimpleKGPipeline
+    kg_builder = SimpleKGPipeline(
         llm=CustomLLM(""),
         driver=neo4j_driver,
         embedder=OllamaEmbeddings(model=os.getenv("KG_BUILDER_EMBEDDING_MODEL_NAME")),
         entities=ENTITIES,
         relations=RELATIONS,
         potential_schema=POTENTIAL_SCHEMA,
-        from_pdf=True,
+        from_pdf=from_pdf,
         neo4j_database=DATABASE,
-        pdf_loader=WikiLoader(),
+        pdf_loader=PdfLoader() if from_pdf else None,
     )
 
     return kg_builder, neo4j_driver
 
 
 async def run_pipeline(
-    kg_builder: CustomKGPipeline,
-    user_input: dict[str, Any],
+    kg_builder: SimpleKGPipeline,
+    text: str = TEXT,
+    file_path: str = None,
 ) -> PipelineResult:
     """
     Run the pipeline with the given text."
     """
-    # Create an instance of the CustomKGPipeline
-    return await kg_builder.run_async(user_input=user_input)
+    # Create an instance of the SimpleKGPipeline
+    if file_path:
+        return await kg_builder.run_async(file_path=file_path)
+    return await kg_builder.run_async(text=text)
+
 
 
 async def main() -> PipelineResult:
@@ -122,31 +106,31 @@ async def build_kg_from_text(
     Build a KG from the given text.
     """
     kg_builder, neo4j_driver = define_pipeline()
-    res = await run_pipeline(kg_builder, {"text": text})
+    res = await run_pipeline(kg_builder, text=text)
     
     # Close the Neo4j driver
     await kg_builder.runner.close()
     neo4j_driver.close()
     return res
 
-async def build_kg_from_text(
-    
+async def build_kg_from_pdf(
+    file_path: str = "graphrag/Apple_Vision_Pro_Privacy_Overview.pdf",
 ) -> None:
     """
     Build a KG from the given text.
     """
-    kg_builder, neo4j_driver = define_pipeline()
-    res = await run_pipeline(kg_builder, {"text": text})
+    kg_builder, neo4j_driver = define_pipeline(from_pdf=True)
+    res = await run_pipeline(kg_builder, file_path=file_path)
     
     # Close the Neo4j driver
     await kg_builder.runner.close()
     neo4j_driver.close()
     return res
 
+
 if __name__ == "__main__":
     res = asyncio.run(main())
     print(res)
-
 
 
 
