@@ -1,5 +1,109 @@
-## Links
-1. [Microsoft's implementation of Graph Rag. Includes Python package](https://github.com/microsoft/graphrag/blob/ddc6541ab6e0483d4f23de14579034fa1c4056d4/examples_notebooks/community_contrib/neo4j/graphrag_import_neo4j_cypher.ipynb#L4)
-1. [Azure implementation of Graph RAG](https://github.com/Azure-Samples/graphrag-accelerator)
-1. [Graph RAG examples using LangChain and graphrag package](https://github.com/NirDiamant/RAG_Techniques)
-1. [Neo4j Implementation of GraphRAG](https://github.com/neo4j/neo4j-graphrag-python)
+Here’s a detailed yet concise `README.md` file tailored to your project structure and setup requirements:
+
+---
+
+# 🧠 Multi-Modal Knowledge Graph Builder using LLMs
+
+This project demonstrates the construction of a **Knowledge Graph** from **multi-modal data sources** like YouTube subtitles, Reddit threads, and official PDFs using **LLMs and embeddings**, with storage in a **Neo4j** graph database.
+
+---
+
+## 📦 Features
+
+- Scrape and parse data from **YouTube**, **Reddit**, and **Web PDFs**
+- Normalize and merge into unified **JSON format**
+- Construct graph schema using **LLMs**
+- Store graph data in **Neo4j** using **Cypher**
+- Interface with frontend UI for chat and visualization
+
+---
+
+## 🚀 Project Structure
+
+```
+├── backend/         ← Python API to interface with the graph
+├── common/          ← Shared utilities like LLMs and handlers
+├── Data/            ← Contains scraped and merged data
+├── frontend/        ← React + Tailwind frontend interface
+├── graphrag/        ← Core KG builder pipeline, LLM graph builder, indexers
+├── ipnyb_files/     ← Notebooks for experimentation
+├── .env             ← Environment configuration
+├── requirements.txt ← Python dependencies
+```
+
+---
+
+## 🔧 Prerequisites
+
+1. **Install Neo4j** and run on your local machine  
+   👉 [Download Neo4j](https://neo4j.com/download/)
+
+2. **Enable APOC Plugin (Awesome Procedures On Cypher)**  
+   - Go to Neo4j Desktop → Plugins → Install APOC
+   - Ensure it's enabled in `neo4j.conf`:
+     ```
+     dbms.security.procedures.unrestricted=apoc.*
+     dbms.security.procedures.allowlist=apoc.*
+     ```
+
+3. **Configure Azure Keys**  
+   - Set up your Azure environment
+   - Place your keys in the `.env` file
+
+---
+
+## 📄 .env Configuration
+
+```env
+LLM_MODEL_NAME=deepseek-r1:7b
+EMBEDDING_MODEL_NAME=nomic-embed-text
+NEO4J_URI=neo4j://localhost:7687
+NEO4J_USERNAME=neo4j
+NEO4J_PASSWORD=12345678
+KG_BUILDER_LLM_MODEL_NAME=llama3.1:8b
+KG_BUILDER_EMBEDDING_MODEL_NAME=nomic-embed-text
+```
+
+---
+
+## 💾 Data Collection (Apple Vision Pro Example)
+
+- **YouTube:** Subtitles downloaded as `.srt`, converted to `.json`
+- **Reddit:** API bot fetches threads and comments
+- **Documentation:** Scraper crawls and converts Apple VisionOS docs
+
+Merged result: `Data/VisionPro/merged.json`
+
+---
+
+## ⚙️ How to Run
+
+1. **Backend API**
+   ```bash
+   cd backend
+   python main.py
+   ```
+
+2. **Frontend UI**
+   ```bash
+   cd frontend
+   pnpm install
+   pnpm dev
+   ```
+
+3. **Knowledge Graph Pipeline**
+   ```bash
+   cd graphrag
+   python pipeline.py
+   ```
+
+---
+
+## 📌 Credits
+
+- Code generation aided by **Generative AI**
+- Built with ❤️ by Syed Ahad Ali and team, as part of **Capstone Project 2025**
+
+---
+
+Let me know if you'd like a version with emojis removed or tailored for Markdown renderers like GitHub vs. academic slides.
