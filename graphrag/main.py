@@ -9,7 +9,7 @@ with open(json_file_path, "r") as f:
     data = json.load(f)
 
 
-import kg_builder
+import graphrag.kg_builder as kg_builder
 
 vision_docs = data["visionos_docs_PDFs"]
 

@@ -6,22 +6,21 @@ from neo4j_graphrag.indexes import create_vector_index
 # 3rd party libs
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
-load_dotenv()
+from shared.env import (
+    NEO4J_URI,
+    NEO4J_USERNAME,
+    NEO4J_PASSWORD,
+    NEO4J_VECTOR_INDEX_NAME,
+    VECTOR_DIMENSION,
+)
 
-# Neo4j db infos
-URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")
-AUTH = (os.getenv("NEO4J_USERNAME", "neo4j"), os.getenv("NEO4J_PASSWORD", "password"))
-INDEX_NAME = "vectorIndex"
-DIMENSION = 768
-
-driver = neo4j.GraphDatabase.driver(URI, auth=AUTH)
+driver = neo4j.GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USERNAME, NEO4J_PASSWORD))
 
 create_vector_index(
     driver,
-    INDEX_NAME,
+    NEO4J_VECTOR_INDEX_NAME,
     label="Chunk",
     embedding_property="embedding",
-    dimensions=DIMENSION,
-    similarity_fn="euclidean",
+    dimensions=VECTOR_DIMENSION,
+    similarity_fn="cosine",
 )
