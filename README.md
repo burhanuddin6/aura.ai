@@ -1,7 +1,3 @@
-Here’s a detailed yet concise `README.md` file tailored to your project structure and setup requirements:
-
----
-
 # 🧠 Multi-Modal Knowledge Graph Builder using LLMs
 
 This project demonstrates the construction of a **Knowledge Graph** from **multi-modal data sources** like YouTube subtitles, Reddit threads, and official PDFs using **LLMs and embeddings**, with storage in a **Neo4j** graph database.
@@ -96,14 +92,3 @@ Merged result: `Data/VisionPro/merged.json`
    cd graphrag
    python pipeline.py
    ```
-
----
-
-## 📌 Credits
-
-- Code generation aided by **Generative AI**
-- Built with ❤️ by Syed Ahad Ali and team, as part of **Capstone Project 2025**
-
----
-
-Let me know if you'd like a version with emojis removed or tailored for Markdown renderers like GitHub vs. academic slides.
