@@ -1,3 +1,7 @@
+# Auto-add project root to sys.path for direct script execution
+import sys, pathlib
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
+
 import os
 import asyncio
 from typing import Any, List, Optional, Union
@@ -21,11 +25,11 @@ class GraphRAGPipeline:
         llm: LLMInterface = CustomLLM(""),
         retriever: VectorCypherRetriever = Retriever,
         system_instruction: Optional[str] = "You are a helpful assistant that answers questions based *only* on the provided information (graph data and/or file text). If the information does not contain the answer, explicitly state that you cannot answer based on the provided information. Do not use prior knowledge. Maintain a conversational tone.",
-        retrieval_top_k: int = 5,
-        max_graph_context_chars: int = 3000, # Max chars for the entire graph context section
-        max_graph_item_text_chars: int = 500, # Max chars for 'fullText' within one graph item
-        max_file_context_chars: int = 3000,   # Max chars for the file context section
-        max_overall_context_chars: int = 6000 # Max chars for the combined context before query
+        retrieval_top_k: int = 1,
+        max_graph_context_chars: int = 300000, # Max chars for the entire graph context section
+        max_graph_item_text_chars: int = 50000, # Max chars for 'fullText' within one graph item
+        max_file_context_chars: int = 300000,   # Max chars for the file context section
+        max_overall_context_chars: int = 600000 # Max chars for the combined context before query
     ):
         """
         Initializes the GraphRAGPipeline with truncation limits.
@@ -190,15 +194,33 @@ User Query: {user_query}
 
 
 
-# try the pipeline with a simple query
+# Comment out the hardcoded async main example
+# async def main():
+#     pipeline = GraphRAGPipeline()
+#     user_query = "How can I use the RealityKit framework to create a 3D object in the Apple Vision Pro?"
+#     response = await pipeline.chat(user_query)
+#     print(f"Final Response: {response}")
+#
+# if __name__ == "__main__":
+#     asyncio.run(main())
 
-async def main():
+# Interactive CLI chat loop
+import asyncio  # ensure asyncio is available
+
+def main():
     pipeline = GraphRAGPipeline()
-    user_query = "What is Metal?"
-    context_file_text = "The Apple Vision Pro is a mixed-reality headset that combines augmented reality (AR) and virtual reality (VR) capabilities. It is designed to provide immersive experiences for users, allowing them to interact with digital content in a spatial environment."
-    response = await pipeline.chat(user_query, context_file_text)
-    print(f"Final Response: {response}")
-
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    print("Chat session started. Type 'exit' or 'quit' to end.")
+    while True:
+        user_query = input("You: ")
+        if user_query.lower() in ("exit", "quit"):
+            print("Goodbye!")
+            break
+        # run the async chat turn
+        response = loop.run_until_complete(pipeline.chat(user_query))
+        print(f"Assistant: {response}")
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
+

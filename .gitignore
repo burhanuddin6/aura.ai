@@ -2,3 +2,9 @@ venv
 .env.gemini_api_key
 testopenai*
 .env.azure
+__pycache__
+*.pyc
+*.pyo
+Data/
+ipynb_files/
+logs*
