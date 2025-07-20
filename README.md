@@ -74,22 +74,22 @@ Merged result: `Data/VisionPro/merged.json`
 
 ## ⚙️ How to Run
 
-3. **Populating GraphDB Using Graph-Indexing**
+1. **Populating GraphDB Using Graph-Indexing**
    ```bash
    python graphrag/test_add_data.py
    ```
 
-3. **Creating A Vector-Index On The Populated Nodes**
+2. **Creating A Vector-Index On The Populated Nodes**
    ```bash
    python graphrag/create_vector_index.py
    ```
 
-1. **Running The CLI Application**
+3. **Running The CLI Application**
    ```bash
    python3 -m streamlit run graphrag/graphrag.py
    ```
 
-1. **Running Streamlit Application**
+4. **Running Streamlit Application**
    ```bash
    python3 -m streamlit run app.py
    ```
