@@ -1,5 +1,7 @@
 # 🧠 Multi-Modal Knowledge Graph Builder using LLMs
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Now-blue?logo=globe)](http://104.214.168.212/)
+
 This project demonstrates the construction of a **Knowledge Graph** from **multi-modal data sources** like YouTube subtitles, Reddit threads, and official PDFs using **LLMs and embeddings**, with storage in a **Neo4j** graph database.
 
 ---
