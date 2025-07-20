@@ -6,7 +6,6 @@ import os
 
 # Add the project root to the Python path
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
-
 from graphrag.graphrag import GraphRAGPipeline
 
 # --- Streamlit App ---
@@ -14,12 +13,21 @@ from graphrag.graphrag import GraphRAGPipeline
 st.set_page_config(page_title="Docskeeping AI", layout="wide")
 
 st.title("📚 Docskeeping AI (Apple Vision Pro)")
-st.markdown("""
-This is a demonstration of Docskeeping AI, a chatbot that is grounded with relevant documentation and achieves 0 hallucination with the help of Graph based Retrieval-Augmented Generation (RAG).
-This is a proof of concept demonstration of how one can build a highly effective search and QnA system. I have used the Apple Vision Pro documentation for this demo, so you will only get relevant answers related to Apple Vision Pro and its frameworks like ARKit, RealityKit, etc.
-This demo does not show graph indexing process here, but its discussed in my technical blog post [mentioned here](https://burhanuddin6.github.io/resume/#aura).    
-""")
-st.info("Note: This demo has a daily rate limit. If the app is not responding, the daily limit may have been reached. In that case, please try again the next day.")
+
+col1, col2 = st.columns([2, 1])
+
+with col1:
+    st.markdown("""
+    This is a demonstration of Docskeeping AI, a chatbot that is grounded with relevant documentation and achieves 0 hallucination with the help of Graph based Retrieval-Augmented Generation (RAG).
+    This is a proof of concept demonstration of how one can build a highly effective search and QnA system. I have used the Apple Vision Pro documentation for this demo, so you will only get relevant answers related to Apple Vision Pro and its frameworks like ARKit, RealityKit, etc.
+    This demo does not show graph indexing process here, but its discussed in my technical blog post [mentioned here](https://burhanuddin6.github.io/resume/#aura).    
+    """)
+    st.info("Note: This demo has a daily rate limit. If the app is not responding, the daily limit may have been reached. In that case, please try again the next day.")
+
+with col2:
+    st.image("docs/image copy.png", caption="A snapshot of a part of the knowledge graph.")
+
+
 
 # Initialize the GraphRAGPipeline
 @st.cache_resource

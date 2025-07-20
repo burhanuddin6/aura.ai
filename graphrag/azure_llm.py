@@ -67,11 +67,13 @@ class CustomLLM(LLMInterface):
                 timeout=10,
             )
 
-            # print(response.choices[0].message.content)
-            # print(f"Token usage: {response.usage}")
-    
-        return LLMResponse(content=response.choices[0].message.content)
-    
+            print(response.choices[0].message.content)
+            print(f"Token usage: {response.usage}")
+        
+        # remove filter content for inference but keep it for indexing since the think tag will be problematic 
+        # when trying to build the graph
+        return LLMResponse(content=self.filter_content(response.choices[0].message.content))
+
     def filter_content(self, content: str) -> str:
         # find the think tag </think> and remove text above it
         think_tag = "</think>"

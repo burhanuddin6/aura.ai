@@ -22,16 +22,14 @@ from neo4j_graphrag.experimental.pipeline.kg_builder import SimpleKGPipeline
 from neo4j_graphrag.llm import OllamaLLM
 from neo4j_graphrag.experimental.components.pdf_loader import PdfLoader
 
-
-# 3rd party libs
-from dotenv import load_dotenv
-
 # local libs
 from graphrag.data_model import ENTITIES, RELATIONS, POTENTIAL_SCHEMA
 from graphrag.azure_llm import CustomLLM
-
-# Load environment variables from .env file
-load_dotenv(".env")
+from graphrag.shared.env import (
+    NEO4J_URI,
+    NEO4J_USERNAME,
+    NEO4J_PASSWORD,
+)
 
 logging.basicConfig()
 logging.getLogger("neo4j_graphrag").setLevel(logging.DEBUG)
@@ -39,8 +37,7 @@ logging.getLogger("neo4j_graphrag").setLevel(logging.DEBUG)
 
 
 # Neo4j db infos
-URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")
-AUTH = (os.getenv("NEO4J_USERNAME", "neo4j"), os.getenv("NEO4J_PASSWORD", "password"))
+AUTH = (NEO4J_USERNAME, NEO4J_PASSWORD)
 DATABASE = "neo4j"
 
 # Text to process
@@ -56,7 +53,7 @@ def define_pipeline(from_pdf: bool = False) -> SimpleKGPipeline:
         },
     )
     
-    neo4j_driver : neo4j.Driver = neo4j.GraphDatabase.driver(URI, auth=AUTH)
+    neo4j_driver : neo4j.Driver = neo4j.GraphDatabase.driver(NEO4J_URI, auth=AUTH)
     
     # Create an instance of the SimpleKGPipeline
     kg_builder = SimpleKGPipeline(

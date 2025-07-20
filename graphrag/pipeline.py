@@ -40,6 +40,11 @@ from neo4j_graphrag.experimental.components.text_splitters.fixed_size_splitter i
 )
 from neo4j_graphrag.experimental.pipeline.pipeline import PipelineResult
 from neo4j_graphrag.llm import LLMInterface, OpenAILLM
+from graphrag.shared.env import (
+    NEO4J_URI,
+    NEO4J_USERNAME,
+    NEO4J_PASSWORD,
+)
 
 logging.basicConfig(level=logging.INFO)
 
@@ -143,7 +148,7 @@ async def main() -> PipelineResult:
     from azure_llm import CustomLLM
     llm = CustomLLM("")
     driver = neo4j.GraphDatabase.driver(
-        "bolt://localhost:7687", auth=("neo4j", "12345678")
+        NEO4J_URI, auth=(NEO4J_USERNAME, NEO4J_PASSWORD)
     )
     res = await define_and_run_pipeline(driver, llm)
     driver.close()
