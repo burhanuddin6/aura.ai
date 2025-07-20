@@ -72,9 +72,9 @@ class CustomLLM(LLMInterface):
             )
 
             print(response.choices[0].message.content)
-            print(f"\nToken usage: {response.usage}")
+            print(f"Token usage: {response.usage}")
     
-        return LLMResponse(content=self.filter_content(response.choices[0].message.content))
+        return LLMResponse(content=response.choices[0].message.content)
     
     def filter_content(self, content: str) -> str:
         # find the think tag </think> and remove text above it

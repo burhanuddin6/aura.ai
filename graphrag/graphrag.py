@@ -150,7 +150,7 @@ User Query: {user_query}
 """
 
         # 6. Generate response
-        response_content = "Error generating response." # Default error
+        response_data = {"thinking": "Error generating response.", "answer": "Error generating response."}
         try:
             print("Generating response with LLM...")
             llm_response: LLMResponse = await self.llm.ainvoke(
@@ -159,24 +159,24 @@ User Query: {user_query}
                 # Pass the system instruction only on the first call if history is empty
                 system_instruction=self.system_instruction if self.system_instruction else None
             )
-            response_content = llm_response.content
-            print("LLM Response generated.")
+            response_data = self.filter_and_extract_thinking(llm_response.content)
         except Exception as e:
              print(f"Error during LLM generation: {e}")
-             response_content = f"An error occurred while generating the response: {e}"
+             response_data["answer"] = f"An error occurred while generating the response: {e}"
 
-
-        
-        # 8. Return response
-        print(f"Assistant: {response_content}")
-        return response_content
+        # 8. Return structured response
+        return {
+            "context": combined_context,
+            "thinking": response_data.get("thinking", "No thinking process available."),
+            "answer": response_data.get("answer", "No answer generated.")
+        }
 
 
     def add_files(self, file_paths: List[str]):
         """
         Placeholder method for adding files to the graph database (ingestion).
         """
-        print(f"\n--- File Ingestion (Placeholder) ---")
+        print(f"--- File Ingestion (Placeholder) ---")
         print(f"Received {len(file_paths)} file(s) for ingestion into the graph.")
         print("NOTE: Implement your actual ingestion pipeline here!")
         print("Files to process:")
@@ -192,7 +192,20 @@ User Query: {user_query}
             # --- End of Ingestion Logic Placeholder ---
         print("--- End File Ingestion Placeholder ---\n")
 
+    def filter_and_extract_thinking(self, content: str) -> dict:
+        think_tag_start = "<think>"
+        think_tag_end = "</think>"
+        start_index = content.find(think_tag_start)
+        end_index = content.find(think_tag_end)
 
+        if start_index != -1 and end_index != -1:
+            thinking = content[start_index + len(think_tag_start):end_index].strip()
+            answer = content[end_index + len(think_tag_end):].strip()
+        else:
+            thinking = "No thinking process found."
+            answer = content
+
+        return {"thinking": thinking, "answer": answer}
 
 # Comment out the hardcoded async main example
 # async def main():
