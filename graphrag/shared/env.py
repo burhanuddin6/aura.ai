@@ -1,6 +1,13 @@
 import os
 from dotenv import load_dotenv
-load_dotenv(".env.azure")
+# if file exists
+
+# print("Loading environment variables from .env file...")
+if os.path.exists(".env.azure"):
+    load_dotenv(".env.azure")
+#     print("Loaded .env.azure")
+# else:
+#     print("No .env.azure file found, using system environment variables.")
 
 AZURE_INFERENCE_ENDPOINT = os.environ["AZURE_INFERENCE_ENDPOINT"]
 AZURE_INFERENCE_CREDENTIAL = os.environ["AZURE_INFERENCE_CREDENTIAL"]

@@ -9,21 +9,17 @@ from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.aio import ChatCompletionsClient as AsyncChatCompletionsClient
 from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
-
+from graphrag.shared.env import AZURE_INFERENCE_ENDPOINT, AZURE_INFERENCE_CREDENTIAL, AZURE_MODEL_NAME
 
 class CustomLLM(LLMInterface):
     def __init__(
         self, model_name: str, system_instruction: Optional[str] = None, **kwargs: Any
     ):
         super().__init__(model_name, **kwargs)
-        from dotenv import load_dotenv
-        load_dotenv(".env.azure")
-
-        try:
-            self.endpoint = os.environ["AZURE_INFERENCE_ENDPOINT"]
-            self.key = os.environ["AZURE_INFERENCE_CREDENTIAL"]
-            self.model_name = os.environ["AZURE_MODEL_NAME"]
-        except KeyError:
+        self.endpoint = AZURE_INFERENCE_ENDPOINT
+        self.key = AZURE_INFERENCE_CREDENTIAL
+        self.model_name = AZURE_MODEL_NAME
+        if not self.endpoint or not self.key or not self.model_name:
             print("Missing environment variable 'AZURE_INFERENCE_ENDPOINT' or 'AZURE_INFERENCE_CREDENTIAL'")
             print("Set them before running this sample.")
             exit()
@@ -71,8 +67,8 @@ class CustomLLM(LLMInterface):
                 timeout=10,
             )
 
-            print(response.choices[0].message.content)
-            print(f"Token usage: {response.usage}")
+            # print(response.choices[0].message.content)
+            # print(f"Token usage: {response.usage}")
     
         return LLMResponse(content=response.choices[0].message.content)
     
@@ -92,8 +88,7 @@ import asyncio
 async def main():
     llm = CustomLLM("")
     res: LLMResponse = await llm.ainvoke("Hello world")
-    print(res.content)
-    
+    print(res.content)    
 
 # Run the async function
 if __name__ == "__main__":

@@ -55,15 +55,15 @@ class GraphRAGPipeline:
         self.max_file_context_chars = max_file_context_chars
         self.max_overall_context_chars = max_overall_context_chars
 
-        print("GraphRAGPipeline initialized.")
-        print(f"LLM: {type(self.llm).__name__}")
-        print(f"Retriever: {type(self.retriever).__name__}")
-        print(f"Retrieval Top K: {self.retrieval_top_k}")
-        print(f"Context Truncation Limits:")
-        print(f"  Graph Item Text: {self.max_graph_item_text_chars}")
-        print(f"  Graph Section: {self.max_graph_context_chars}")
-        print(f"  File Section: {self.max_file_context_chars}")
-        print(f"  Overall Context: {self.max_overall_context_chars}")
+        # print("GraphRAGPipeline initialized.")
+        # print(f"LLM: {type(self.llm).__name__}")
+        # print(f"Retriever: {type(self.retriever).__name__}")
+        # print(f"Retrieval Top K: {self.retrieval_top_k}")
+        # print(f"Context Truncation Limits:")
+        # print(f"  Graph Item Text: {self.max_graph_item_text_chars}")
+        # print(f"  Graph Section: {self.max_graph_context_chars}")
+        # print(f"  File Section: {self.max_file_context_chars}")
+        # print(f"  Overall Context: {self.max_overall_context_chars}")
 
 
     async def chat(self, user_query: str, context_file_text: Optional[str] = None) -> str:
@@ -89,7 +89,6 @@ class GraphRAGPipeline:
             print(f"Retrieving graph context for query: '{user_query}'...")
             # VectorCypherRetriever has an asearch method
             retrieval_results = self.retriever.search(query_text=user_query, top_k=self.retrieval_top_k)
-            print(f"Retrieved {len(retrieval_results)} graph result(s).")
         except Exception as e:
             print(f"Error during graph retrieval: {e}")
 
@@ -132,9 +131,9 @@ class GraphRAGPipeline:
              combined_context = combined_context[:self.max_overall_context_chars] + "\n... [Overall context truncated]\n" # Add truncation indicator
 
         # Print combined context for debugging (potentially truncated)
-        print("Combined Context for LLM (potentially truncated):")
-        print(combined_context)
-        print("-" * 20)
+        # print("Combined Context for LLM (potentially truncated):")
+        # print(combined_context)
+        # print("-" * 20)
 
 
         # 5. Prepare LLM input (combine combined_context and user query)
@@ -152,7 +151,6 @@ User Query: {user_query}
         # 6. Generate response
         response_data = {"thinking": "Error generating response.", "answer": "Error generating response."}
         try:
-            print("Generating response with LLM...")
             llm_response: LLMResponse = await self.llm.ainvoke(
                 input=llm_input,
                 message_history=[],
