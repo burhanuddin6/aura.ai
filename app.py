@@ -19,6 +19,7 @@ This is a demonstration of Docskeeping AI, a chatbot that is grounded with relev
 This is a proof of concept demonstration of how one can build a highly effective search and QnA system. I have used the Apple Vision Pro documentation for this demo, so you will only get relevant answers related to Apple Vision Pro and its frameworks like ARKit, RealityKit, etc.
 This demo does not show graph indexing process here, but its discussed in my technical blog post [mentioned here](https://burhanuddin6.github.io/resume/#aura).    
 """)
+st.info("Note: This demo has a daily rate limit. If the app is not responding, the daily limit may have been reached. In that case, please try again the next day.")
 
 # Initialize the GraphRAGPipeline
 @st.cache_resource
