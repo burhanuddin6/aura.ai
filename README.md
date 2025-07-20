@@ -3,6 +3,7 @@
 This project demonstrates the construction of a **Knowledge Graph** from **multi-modal data sources** like YouTube subtitles, Reddit threads, and official PDFs using **LLMs and embeddings**, with storage in a **Neo4j** graph database.
 
 ---
+![](docs/image.png)
 
 ## 📦 Features
 
